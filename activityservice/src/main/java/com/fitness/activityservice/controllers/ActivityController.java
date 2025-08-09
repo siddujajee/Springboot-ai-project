@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
-import com.fitness.activityservice.models.Activity;
 import com.fitness.activityservice.services.ActivityService;
 
 import lombok.AllArgsConstructor;
