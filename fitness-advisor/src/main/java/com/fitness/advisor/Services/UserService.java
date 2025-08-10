@@ -52,4 +52,14 @@ public class UserService {
     userResponse.setHeight(savedUser.getHeight());
     return userResponse;
   }
+
+  public Boolean doesUserExist(String userId) {
+    if (userRepository.existsById(userId)) {
+      return true;
+    } else {
+      return false;
+    }
+    // Logic to validate user by userId
+    // For now, returning a placeholder response
+  }
 }
