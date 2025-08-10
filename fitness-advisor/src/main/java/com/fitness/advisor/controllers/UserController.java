@@ -20,21 +20,27 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/users")
 public class UserController {
 
-		private UserService userService;
+	private UserService userService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserProfile(@PathVariable String userId){
-				// Logic to fetch user profile by userId
-				// For now, returning a placeholder response
-				return ResponseEntity.ok(userService.getUserProfile(userId));
-		}
+  @GetMapping("/{userId}")
+  public ResponseEntity<UserResponse> getUserProfile(@PathVariable String userId){
+		// Logic to fetch user profile by userId
+		// For now, returning a placeholder response
+		return ResponseEntity.ok(userService.getUserProfile(userId));
+	}
 
-		@PostMapping("/register")
-		public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegisterRequest request){
-				// Logic to register a new user
-				// For now, returning a placeholder response
-				return ResponseEntity.ok(userService.registerUser(request));
-		}
+	@PostMapping("/register")
+	public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegisterRequest request){
+		// Logic to register a new user
+		// For now, returning a placeholder response
+		return ResponseEntity.ok(userService.registerUser(request));
+	}	
 
-		
+  @GetMapping("/{userId}/validate")
+  public ResponseEntity<Boolean> validateUser(@PathVariable String userId){
+		// Logic to validate user by userId
+		// For now, returning a placeholder response
+		return ResponseEntity.ok(userService.doesUserExist(userId));
+	}
+
 }
