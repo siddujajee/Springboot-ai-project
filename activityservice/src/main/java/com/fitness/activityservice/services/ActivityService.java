@@ -9,6 +9,7 @@ import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.models.Activity;
 import com.fitness.activityservice.repositories.ActivityRepository;
+import com.fitness.activityservice.services.UserValidation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,19 +17,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor // it will generate a constructor with required arguments only such as final fields and non-null fields, this is a primary difference from @AllArgsConstructor
 public class ActivityService {
 
+    private final UserValidation userValidation;
     private final ActivityRepository activityRepository;
+
     public ActivityResponse trackActivity(ActivityRequest activityRequest) {
+      boolean isValidUser = userValidation.isValidUserId(activityRequest.getUserId());
+      if(!isValidUser) {
+        throw new RuntimeException("User Id hai ich nahi");
+      }
       Activity activity = Activity.builder()
-        .userId(activityRequest.getUserId())
-        .type(activityRequest.getType())
-        .duration(activityRequest.getDuration())
-        .caloriesBurned(activityRequest.getCaloriesBurned())
-        .startTime(activityRequest.getStartTime())
-        .additionalMetrics(activityRequest.getAdditionalMetrics())
-        .build();
-        
-        // Save the activity to the database
-        Activity savedActivity = activityRepository.save(activity);
+      .userId(activityRequest.getUserId())
+      .type(activityRequest.getType())
+      .duration(activityRequest.getDuration())
+      .caloriesBurned(activityRequest.getCaloriesBurned())
+      .startTime(activityRequest.getStartTime())
+      .additionalMetrics(activityRequest.getAdditionalMetrics())
+      .build();
+      
+      // Save the activity to the database
+      Activity savedActivity = activityRepository.save(activity);
         // Convert the saved activity to a response DTO
         return convertToResponse(savedActivity);
     }
