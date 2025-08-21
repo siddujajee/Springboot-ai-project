@@ -3,6 +3,8 @@ package com.fitness.activityservice.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fitness.activityservice.dto.ActivityRequest;
@@ -12,18 +14,26 @@ import com.fitness.activityservice.repositories.ActivityRepository;
 import com.fitness.activityservice.services.UserValidation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor // it will generate a constructor with required arguments only such as final fields and non-null fields, this is a primary difference from @AllArgsConstructor
 public class ActivityService {
 
     private final UserValidation userValidation;
     private final ActivityRepository activityRepository;
 
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
+    private final RabbitTemplate rabbitTemplate;
+
     public ActivityResponse trackActivity(ActivityRequest activityRequest) {
       boolean isValidUser = userValidation.isValidUserId(activityRequest.getUserId());
       if(!isValidUser) {
-        throw new RuntimeException("User Id hai ich nahi");
+        throw new RuntimeException("user id is not valid");
       }
       Activity activity = Activity.builder()
       .userId(activityRequest.getUserId())
@@ -36,6 +46,15 @@ public class ActivityService {
       
       // Save the activity to the database
       Activity savedActivity = activityRepository.save(activity);
+        // publish activity to RabbitMQ
+        try{
+            log.info(exchange);
+            log.info(routingKey);
+          rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+        } catch (Exception e) {
+          log.error("Error publishing activity to RabbitMQ", e);
+        }
+
         // Convert the saved activity to a response DTO
         return convertToResponse(savedActivity);
     }
