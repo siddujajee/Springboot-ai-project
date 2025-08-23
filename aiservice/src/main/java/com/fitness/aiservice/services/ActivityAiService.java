@@ -33,10 +33,10 @@ public class ActivityAiService {
       JsonNode textNode = rootNode.path("candidates").get(0).path("content").path("parts").get(0).path("text");
       
       // replace all the unwanted placeholders from the response
-      String jsonContent = textNode.asText().replaceAll("```\\n", "").replaceAll("\\n", "").trim();
-      log.info("Processed AI response for activity {}: {}", activity.getId(), jsonContent);
+      String jsonContent = textNode.asText().replaceAll("```json\\n", "").replaceAll("\\n```", "").trim();
+      log.info("Processed AI response for activity: {}", jsonContent);
     } catch (Exception e) {
-      log.error("Error processing AI response for activity {}: {}", activity.getId(), e.getMessage());
+      log.error("Error processing AI response for activity: {}", e.getMessage());
     }
   }
 
@@ -50,37 +50,40 @@ public class ActivityAiService {
         "analysis": "Provide a brief analysis of the activity.",
         "pace": "Provide the pace information.",
         "heartRate": "Provide the heart rate information.",
-        "caloriesBurned": "Provide the calories burned information."
-      },
-      "Area of improvements": [
+        "caloriesBurned": "Provide the calories burned information.",
+
+        "Area of improvements": [
+          {
+            "area": "Provide the area of improvement.",
+            "recommendation": "Provide a recommendation for improvement."
+          }
+        ],
+
+        "suggestions": [
         {
-          "area": "Provide the area of improvement.",
-          "recommendation": "Provide a recommendation for improvement."
-        }
-      ],
-      "suggestions": [
-      {
-        "workout": "Provide a suggestion for improvement.",
-        "description": "Detailed workout description."
-      }],
-      "safety": [
-        {
-          "guideline": "Provide a safety guideline.",
-          "description": "Detailed safety description."
-        } 
-      ]
+          "workout": "Provide a suggestion for improvement.",
+          "description": "Detailed workout description."
+        }],
         
-      analyse this activity
-      {
-        Activity Type: %s
-        Duration: %d minutes
-        Calories Burned: %d
-        Additional Matrix: %s
+        "safety": [
+          {
+            "guideline": "Provide a safety guideline.",
+            "description": "Detailed safety description."
+          } 
+        ]
       }
 
-      ensure that the response is in valid JSON format mentioned above strictly.
+        analyse this activity
+        {
+          Activity Type: %s
+          Duration: %d minutes
+          Calories Burned: %d
+          Additional Matrix: %s
+        }
 
-      """,
+        ensure that the response is in valid JSON format mentioned above strictly.
+
+        """,
       activity.getType(),
       activity.getDuration(),
       activity.getCaloriesBurned(),
