@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class Activity {
     private String id;
+    private String type; // e.g., Running, Cycling, Swimming
     private String userId;
     private Integer duration; // in minutes
     private Integer caloriesBurned;
