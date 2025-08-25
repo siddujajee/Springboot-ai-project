@@ -11,7 +11,6 @@ import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.models.Activity;
 import com.fitness.activityservice.repositories.ActivityRepository;
-import com.fitness.activityservice.services.UserValidation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
