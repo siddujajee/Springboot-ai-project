@@ -48,8 +48,8 @@ public class ActivityService {
       Activity savedActivity = activityRepository.save(activity);
         // publish activity to RabbitMQ
         try{
-            log.info(exchange);
-            log.info(routingKey);
+            // log.info(exchange);
+            // log.info(routingKey);
           rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
         } catch (Exception e) {
           log.error("Error publishing activity to RabbitMQ", e);
