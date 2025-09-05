@@ -28,12 +28,23 @@ public class UserService {
 
   public UserResponse registerUser(RegisterRequest request) {
     if(userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
-      throw new RuntimeException("Username or email already exists");
+      User existingUser = userRepository.findByEmail(request.getEmail());
+      UserResponse userResponse = new UserResponse();
+      userResponse.setId(existingUser.getId());
+      userResponse.setKeyCloakUserId(existingUser.getKeyCloakUserId());
+      userResponse.setUsername(existingUser.getUsername());
+      userResponse.setFirstname(existingUser.getFirstname());
+      userResponse.setLastname(existingUser.getLastname());
+      userResponse.setEmail(existingUser.getEmail());
+      userResponse.setWeight(existingUser.getWeight());
+      userResponse.setHeight(existingUser.getHeight());
+      return userResponse;
     }
 
     User user = new User(); 
     user.setUsername(request.getUsername());
     user.setFirstname(request.getFirstname());
+    user.setKeyCloakUserId(request.getKeyCloakUserId());
     user.setLastname(request.getLastname());
     user.setEmail(request.getEmail());
     user.setWeight(request.getWeight());
@@ -42,6 +53,8 @@ public class UserService {
     userRepository.save(user);
     User savedUser = user;
     UserResponse userResponse = new UserResponse();
+    userResponse.setId(savedUser.getId());
+    userResponse.setKeyCloakUserId(savedUser.getKeyCloakUserId());
     userResponse.setUsername(savedUser.getUsername());
     userResponse.setFirstname(savedUser.getFirstname());
     userResponse.setLastname(savedUser.getLastname());
