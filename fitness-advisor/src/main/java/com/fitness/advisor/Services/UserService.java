@@ -23,11 +23,11 @@ public class UserService {
     userResponse.setWeight(user.getWeight());
     userResponse.setHeight(user.getHeight());
     return userResponse;
-    // Logic to fetch user profile by userId    
+    // Logic to fetch user profile by userId
   }
 
   public UserResponse registerUser(RegisterRequest request) {
-    if(userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
+    if (userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
       User existingUser = userRepository.findByEmail(request.getEmail());
       UserResponse userResponse = new UserResponse();
       userResponse.setId(existingUser.getId());
@@ -67,7 +67,7 @@ public class UserService {
   }
 
   public Boolean doesUserExist(String userId) {
-    if (userRepository.existsById(userId)) {
+    if (userRepository.existsByKeyCloakUserId(userId)) {
       return true;
     } else {
       return false;

@@ -22,21 +22,25 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/activities")
 public class ActivityController {
 
-    private ActivityService activityService;
-    @PostMapping
-    public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest activityRequest) {
-        return ResponseEntity.ok(activityService.trackActivity(activityRequest));
-    }
+  private ActivityService activityService;
 
-    @GetMapping
-    public ResponseEntity<List<ActivityResponse>> getUserActivities(@RequestHeader("X-User-Id") String userId) {
-        return ResponseEntity.ok(activityService.getUserActivities(userId));
+  @PostMapping
+  public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest activityRequest, @RequestHeader("X-User-Id") String userId) {
+    if(userId != null){
+      activityRequest.setUserId(userId);
     }
+    return ResponseEntity.ok(activityService.trackActivity(activityRequest));
+  }
 
-    @GetMapping("/{activityId}")
-    public ResponseEntity<ActivityResponse> getActivity(@PathVariable String activityId) {
-        ActivityResponse activityResponse = activityService.getActivityById(activityId);
-        return ResponseEntity.ok(activityResponse);
-    }
+  @GetMapping
+  public ResponseEntity<List<ActivityResponse>> getUserActivities(@RequestHeader("X-User-Id") String userId) {
+    return ResponseEntity.ok(activityService.getUserActivities(userId));
+  }
+
+  @GetMapping("/{activityId}")
+  public ResponseEntity<ActivityResponse> getActivity(@PathVariable String activityId) {
+    ActivityResponse activityResponse = activityService.getActivityById(activityId);
+    return ResponseEntity.ok(activityResponse);
+  }
 
 }

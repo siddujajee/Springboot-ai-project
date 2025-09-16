@@ -32,7 +32,7 @@ public class ActivityService {
     public ActivityResponse trackActivity(ActivityRequest activityRequest) {
       boolean isValidUser = userValidation.isValidUserId(activityRequest.getUserId());
       if(!isValidUser) {
-        throw new RuntimeException("user id is not valid");
+        throw new RuntimeException("user id is not valid: " + activityRequest.getUserId());
       }
       Activity activity = Activity.builder()
       .userId(activityRequest.getUserId())
