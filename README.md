@@ -8,7 +8,7 @@ It also includes a React frontend that communicates with the backend via REST AP
  - Eureka server (spring cloud netflix)
  - Spring Cloud Gateway
  - Keycloak
- - RabbitMQ
+ - RabbitMQ (AMQP - Advance Message Queuing Protocol - protocol for reliable sending messages between applications)
  - MySQL
  - Gemini API
  - Spring Cloud config server
